@@ -36,7 +36,10 @@ cd  tools/extras
 
 最终效果：
 
-![image-20210128111931267](C:\Users\yingchao.yuan\AppData\Roaming\Typora\typora-user-images\image-20210128111931267.png)
+```shell
+yuanyingchao@Yuan-Ubuntu:~/Code/kaldi/tools$ extras/check_dependencies.sh
+extras/check_dependencies.sh: all OK.
+```
 
 ##### MKL编译
 
@@ -81,7 +84,14 @@ cd  egs/yesno/s5   //进入测试的例子文件夹
 
 ./run.sh  				//执行脚本，来运行该例子
 
-![image-20210128113723405](C:\Users\yingchao.yuan\AppData\Roaming\Typora\typora-user-images\image-20210128113723405.png)
+```shell
+# 打印
+Overall, lattice depth (10,50,90-percentile)=(1,1,2) and mean=1.2
+steps/diagnostic/analyze_lats.sh: see stats in exp/mono0a/decode_test_yesno/log/analyze_lattice_depth_stats.log
+local/score.sh --cmd utils/run.pl data/test_yesno exp/mono0a/graph_tgpr exp/mono0a/decode_test_yesno
+local/score.sh: scoring with word insertion penalty=0.0,0.5,1.0
+%WER 0.00 [ 0 / 232, 0 ins, 0 del, 0 sub ] exp/mono0a/decode_test_yesno/wer_10_0.0
+```
 
 最后显示了%WER 0.00 [ 0 / 232, 0 ins ,0 del ,0 sub ]，表示识别的结果还是非常准确的。这里说明一下WER是什么东西。
 WER（Word Error Rate）代表的是字错误率，是衡量语音识别系统的准确程度的标准。计算公式如下
@@ -125,7 +135,7 @@ MFCC(Mel-frequency cepstral coefficients):梅尔频率倒谱系数。梅尔频�
 
 MFCC一般会经过这么几个步骤：预加重，分帧，加窗，快速傅里叶变换(FFT)，梅尔滤波器组，离散余弦变换(DCT)，其中最重要的就是FFT和梅尔滤波器组，这两个进行了主要的将维操作。
 
-### Mono
+### Monophone
 
 ### Triphone
 
