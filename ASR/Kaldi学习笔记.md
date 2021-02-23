@@ -137,6 +137,8 @@ MFCC一般会经过这么几个步骤：预加重，分帧，加窗，快速傅�
 
 ### Monophone
 
+训练单音素
+
 ### Triphone
 
 ### fMLLR
@@ -168,4 +170,24 @@ GMMs已经在数值逼近、语音识别、图像分类、图像去噪、图像�
 ## 运行aishell
 
 中文识别的demo，需要下载语料，15G
+
+
+
+
+
+## Kaldi语音识别步骤
+
+### 数据准备
+
+需要准备四个文件:
+
+wav.scp：<recording-id>	<extended-filename>（发声ID	全路径的录音文件名字）
+
+text： <utterance-id>	<sentence content>	（发声ID	分词后的句子内容）
+
+utt2spk：<utterance-id>	<speaker-id>	（发声ID	说话人ID）
+
+spk2utt：<speaker-id>	<utterance-id>	（说话人ID	发声ID）
+
+
 
