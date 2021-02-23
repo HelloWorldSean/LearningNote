@@ -141,9 +141,19 @@ MFCC一般会经过这么几个步骤：预加重，分帧，加窗，快速傅�
 
 ### Triphone
 
+三音素训练
+
 ### fMLLR
 
+声学特征变换，特征空间最大似然线性回归（Feature-space Maximum Likelihood Linear Regression, FMLLR）
+
 ### SAT
+
+说话人自适应训练	(Speaker Adaptive Training）
+
+说话人自适应技术是利用特定说话人数据对**说话人无关(Speaker Independent,SI)**的码本进行改造，其目的是得到说**话人自适应(SPeaker Adapted, SA)**的码本来提升识别性能。我们知道在某个说话人的训练数据足够多的时候，针对当前说话人数据采用传统的训练方法可以得到×**说话人相关(Speaker Dependent, SD)**的码本,由于SD码本很好的反应了当前说话人的特征，因此效果往往更好，但实际中往往缺少足够的数据，因此采用说话人自适应，这样我们只需要很少量的数据就可以得到比较大的性能提升。**其实质是利用自适应数据调整SI码本以符合当前说话人特性**。
+
+由于传统训练方法得到的 SI 码本不可避免地受训练集特性的影响, 在**训练集和自适应数据失配**时这会导致自适应效果变得不明显, **原始码本越具有说话人无关性, 在自适应时就越能迅速地趋近当前说话人的特征**。与自适应相结合的码本训练**对 SI 码本、训练集内每个说话人特性分别建立模型**, 因此可以得到更具说话人无关性的 SI 码本。
 
 ### TDNN
 
@@ -176,6 +186,44 @@ GMMs已经在数值逼近、语音识别、图像分类、图像去噪、图像�
 
 
 ## Kaldi语音识别步骤
+
+1. 语料准备
+2. 构建语法模型（G.fst）
+3. 构建发音词典模型（L.fst）
+4. 合并发音词典与语法模型（LG.fst）
+5. 确定化发音词典与语法模型（det-LG.fst）
+6. 构建上下文模型与发音词典模型、语法模型（CLG.fst）
+7. 构建HMM模型（H.fst）
+8. 合并HMM模型，上下文模型、发音词典模型、语法模型（HCLG.fst）
+
+模型可视化：sudo apt install graphviz
+
+```shell
+kaldi/tools/openfst/bin/fstdraw --isymbols=words.txt --osymbols=words.txt G.fst > G.dot
+dot -Tjpg G.dot > G.jpg
+dot -Tpdf G.dot > G.pdf
+模型太大话画不出来，非常吃内存
+```
+
+在训练的job并行训练过程中，训练数据的各个子集合是分散到不同的处理器去进行训练，然后每轮迭代后会进行合并。 下面就讲一下训练的过程： 
+
+1.首先是初始化GMM，使用的脚本是/kaldi-trunk/src/gmmbin/gmm-init-mono，输出是0.mdl和tree文件； 
+
+2.compile training graphs,使用的脚本是/kaldi-trunk/source/bin/compile-training-graphs，输入是tree,0.mdl和L.fst,输出是fits.JOB.gz，其是在训练过程中构建graph的过程； 
+
+3.接下来是一个对齐的操作，kaldi-trunk/source/bin/align-equal-compiled； 
+
+4.然后是基于GMM的声学模型进行最大似然估计得过程，脚本为/kaldi-trunk/src/gmmbin/gmm-est； 
+
+5.然后进行迭代循环中进行操作，如果本步骤到了对齐的步骤，则调用脚本kaldi-kaldi/src/gmmbin/gmm-align-compiled； 
+
+6.重新估计GMM，累计状态，用脚本/kaldi-trunk/src/gmmbin/gmm-acc-states-ali；调用新生成的参数(高斯数)重新估计GMM，调用脚本/kaldi-trunk/src/gmmbin/gmm-est；
+
+7.对分散在不同处理器上的结果进行合并，生成.mdl结果，调用脚本gmm-acc-sum； 
+
+8.增加高斯数，如果没有超过设定的迭代次数，则跳转到步骤5重新进行训练 最后生成的.mdl即为声学模型文件 在离线识别阶段，即可以调用utils/mkgraph.sh；来对刚刚生成的声学文件进行构图 之后解码，得到离线测试的识别率。
+
+
 
 ### 数据准备
 
