@@ -1,11 +1,11 @@
 Golang、算法、服务器、Linux系统、大数据、架构相关资料
 https://github.com/overnote
-	https://github.com/overnote/over-golang.git
-	https://github.com/overnote/over-javascript.git
-	https://github.com/overnote/over-algorithm.git
-	https://github.com/overnote/over-server.git
-	https://github.com/overnote/over-linux.git
-	https://github.com/overnote/over-bigdata.git
-	https://github.com/overnote/over-python.git
-	https://github.com/overnote/over-shell.git
+	git clone https://github.com/overnote/over-golang.git
+	git clone https://github.com/overnote/over-javascript.git
+	git clone https://github.com/overnote/over-algorithm.git
+	git clone https://github.com/overnote/over-server.git
+	git clone https://github.com/overnote/over-linux.git
+	git clone https://github.com/overnote/over-bigdata.git
+	git clone https://github.com/overnote/over-python.git
+	git clone https://github.com/overnote/over-shell.git
 
